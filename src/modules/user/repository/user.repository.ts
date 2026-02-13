@@ -1,30 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { UUID } from 'crypto';
-import { LoggingService } from 'src/modules/common/logging/logging.service';
-import { handlePrismaError } from 'src/prisma/handle-prisma-error';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateQuestionPlaylistDto } from '../dto/create-question-playlist.dto';
-import { UpdateQuestionPlaylistDto } from '../dto/update-question-playlist.dto';
+import { CreateUserDTO } from '../dto/create-user.dto';
 
 @Injectable()
-export class QuestionPlaylistsRepository {
-  constructor(
-    private readonly prismaService: PrismaService,
-  ) {}
+export class UserRepository {
+  constructor(private readonly prismaService: PrismaService) {}
 
-  // Criar Playlist Manual (Vazia)
-  async createUser(dto: createUserDTO) {
+  async createUser(dto: CreateUserDTO) {
     try {
-        return await this.prismaService.user.create({data: {
-            email: dto.email,
-            password: dto.password,
-            document: dto.document,
-            country: dto.country,
-            updatedAt: new Date(),
-        }})
+      return await this.prismaService.user.create({
+        data: {
+          email: dto.email,
+          password: dto.password,
+          document: dto.document,
+          country: dto.country,
+          updatedAt: new Date(),
+        },
+      });
     } catch (error) {
-        console.error(`Erro ao criar usuário no banco de dados: ${error}`);
-        handlePrismaError(error);
+      console.error(`Erro ao criar usuário no banco de dados: ${error}`);
+      throw error;
+    }
+  }
+
+  async getUsers() {
+    try {
+      return await this.prismaService.user.findMany({
+        select: {
+          id: true,
+          email: true,
+          country: true,
+          document: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    } catch (error) {
+      console.error(`Erro ao buscar usuários no banco de dados: ${error}`);
+      throw error;
+    }
+  }
+
+  async getUserById(id: string) {
+    try {
+      return await this.prismaService.user.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+          email: true,
+          country: true,
+          document: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      console.error(
+        `Erro ao buscar usuário por ID no banco de dados: ${error}`,
+      );
+      throw error;
     }
   }
 }
