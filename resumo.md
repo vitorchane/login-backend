@@ -32,8 +32,10 @@ Este repositório contém uma API em NestJS para cadastro e autenticação de us
      - docker compose up -d
    - Parar e remover:
      - docker compose down
-   - Remover volumes e imagens:
-     - docker compose down -v --rmi all && docker system prune -f
+
+- docker compose exec api npx prisma migrate deploy
+- Remover volumes e imagens:
+  - docker compose down -v --rmi all && docker system prune -f
 
 ## Endpoints
 
