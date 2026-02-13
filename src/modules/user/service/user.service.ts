@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDTO } from '../dto/create-user.dto';
 import { UserRepository } from '../repository/user.repository';
 
@@ -8,7 +9,19 @@ export class UserService {
 
   async createUser(dto: CreateUserDTO) {
     try {
-      return await this.userRepository.createUser(dto);
+      // Verificar se email já existe
+      const existingUser = await this.userRepository.getUserByEmail(dto.email);
+      if (existingUser) {
+        throw new ConflictException('Email já cadastrado');
+      }
+
+      // Hash da senha
+      const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+      return await this.userRepository.createUser({
+        ...dto,
+        password: hashedPassword,
+      });
     } catch (error) {
       console.error(`Erro ao criar usuário: ${error}`);
       throw error;

@@ -1,5 +1,6 @@
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -13,5 +14,5 @@ model User {
   document  String
   password  String
   createdAt DateTime @default(now())
-  updatedAt DateTime 
+  updatedAt DateTime @updatedAt
 }

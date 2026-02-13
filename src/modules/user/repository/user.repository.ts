@@ -13,8 +13,16 @@ export class UserRepository {
           email: dto.email,
           password: dto.password,
           document: dto.document,
-          country: dto.country,
+          country: dto.country.toUpperCase(),
           updatedAt: new Date(),
+        },
+        select: {
+          id: true,
+          email: true,
+          country: true,
+          document: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
     } catch (error) {
@@ -62,6 +70,21 @@ export class UserRepository {
     } catch (error) {
       console.error(
         `Erro ao buscar usuário por ID no banco de dados: ${error}`,
+      );
+      throw error;
+    }
+  }
+
+  async getUserByEmail(email: string) {
+    try {
+      return await this.prismaService.user.findUnique({
+        where: {
+          email,
+        },
+      });
+    } catch (error) {
+      console.error(
+        `Erro ao buscar usuário por email no banco de dados: ${error}`,
       );
       throw error;
     }
