@@ -29,7 +29,7 @@ Este repositório contém uma API em NestJS para cadastro e autenticação de us
 
 5. Rodando com Docker
    - Subir serviços:
-     - docker compose up -d
+     - docker compose up
    - Parar e remover:
      - docker compose down
 

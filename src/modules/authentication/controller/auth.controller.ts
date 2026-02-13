@@ -20,8 +20,35 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Realizar login e obter JWT token' })
-  @ApiBody({ type: LoginDTO })
-  @ApiResponse({ status: 200, description: 'Login realizado com sucesso' })
+  @ApiBody({
+    type: LoginDTO,
+    examples: {
+      exemplo1: {
+        summary: 'Login com email e senha válidos',
+        value: {
+          email: 'usuario@email.com',
+          password: 'senha123',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Login realizado com sucesso',
+    schema: {
+      example: {
+        message: 'Login realizado com sucesso',
+        data: {
+          access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+          user: {
+            id: '550e8400-e29b-41d4-a716-446655440000',
+            email: 'usuario@email.com',
+            cpf: '12345678900',
+          },
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 400, description: 'Email e senha são obrigatórios' })
   @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   async login(@Body() dto: LoginDTO) {
