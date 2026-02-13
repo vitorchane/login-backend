@@ -29,7 +29,19 @@ export class UserController {
   @Post('')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Criar novo usuário' })
-  @ApiBody({ type: CreateUserDTO })
+  @ApiBody({
+    type: CreateUserDTO,
+    examples: {
+      example1: {
+        value: {
+          email: 'john@example.com',
+          country: 'US',
+          document: 'ABC12345',
+          password: 'password123',
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 201, description: 'Usuário criado com sucesso' })
   @ApiResponse({ status: 400, description: 'Validação falhou' })
   @ApiResponse({ status: 409, description: 'Email já cadastrado' })
