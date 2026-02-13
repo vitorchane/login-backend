@@ -4,6 +4,12 @@
 
 Este repositório contém uma API em NestJS para cadastro e autenticação de usuários. O objetivo é permitir registro de usuários (com validação de documento), login via JWT e consultas protegidas.
 
+## Ferramentas necessárias
+
+- Docker
+- Docker-Compose
+- Git
+
 ## Setup
 
 1. Clonar e instalar
@@ -28,12 +34,13 @@ Este repositório contém uma API em NestJS para cadastro e autenticação de us
    - npm run start:dev
 
 5. Rodando com Docker
-   - Subir serviços:
-     - docker compose up
-   - Parar e remover:
-     - docker compose down
 
-- docker compose exec api npx prisma migrate deploy
+- Subir serviços:
+  - docker compose up
+- Parar e remover:
+  - docker compose down
+- Aplicar migrations dentro do container
+  - docker compose exec api npx prisma migrate deploy
 - Remover volumes e imagens:
   - docker compose down -v --rmi all && docker system prune -f
 
